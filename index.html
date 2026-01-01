@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Arzi - Application Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0fdf4; } /* Light green theme */
+    </style>
+</head>
+<body class="p-6">
+
+    <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-green-800"><i class="fas fa-pen-nib"></i> Digital Arzi</h1>
+            <p class="text-gray-600">Generate formal college applications in seconds.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-bold mb-4 text-green-700">1. Enter Details</h2>
+                
+                <label class="block mb-2 text-sm font-bold">Application Type</label>
+                <select id="appType" class="w-full p-2 border rounded mb-4 bg-gray-50" onchange="updateReasonField()">
+                    <option value="sick">Sick Leave (Bimaari ki Chutti)</option>
+                    <option value="urgent">Urgent Piece of Work (Zaruri Kaam)</option>
+                    <option value="buspass">Bus Pass Request</option>
+                    <option value="complaint">Facility Complaint (e.g., Water/Fan)</option>
+                    <option value="dmc">Request for DMC/Degree</option>
+                </select>
+
+                <label class="block mb-2 text-sm font-bold">To Whom?</label>
+                <select id="authority" class="w-full p-2 border rounded mb-4">
+                    <option value="The Principal">The Principal</option>
+                    <option value="The HOD">The HOD (Head of Dept)</option>
+                    <option value="The Registrar">The Registrar</option>
+                </select>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block mb-1 text-xs">Your Name</label>
+                        <input type="text" id="studentName" placeholder="Amit Kumar" class="w-full p-2 border rounded mb-3">
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-xs">Roll No / Class</label>
+                        <input type="text" id="rollNo" placeholder="12345 / BCA 2nd" class="w-full p-2 border rounded mb-3">
+                    </div>
+                </div>
+
+                <label class="block mb-1 text-xs">College Name</label>
+                <input type="text" id="collegeName" placeholder="Govt College, Karnal" class="w-full p-2 border rounded mb-3">
+
+                <label class="block mb-1 text-xs" id="reasonLabel">Reason / Specific Complaint</label>
+                <textarea id="reasonText" class="w-full p-2 border rounded mb-4 h-20" placeholder="e.g., I have high fever since last night..."></textarea>
+
+                <button onclick="generateApp()" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700 transition">
+                    <i class="fas fa-magic"></i> Write Application
+                </button>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-lg border-2 border-dashed border-gray-300">
+                <h2 class="text-xl font-bold mb-4 text-gray-700">2. Preview & Copy</h2>
+                <div id="paper" class="bg-gray-50 p-6 text-sm leading-relaxed font-serif text-gray-800 h-96 overflow-y-auto whitespace-pre-wrap">
+                    Your application will appear here...
+                </div>
+                <button onclick="copyText()" class="mt-4 text-green-600 font-bold text-sm hover:underline">
+                    <i class="fas fa-copy"></i> Copy to Clipboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateReasonField() {
+            const type = document.getElementById('appType').value;
+            const label = document.getElementById('reasonLabel');
+            const placeholder = document.getElementById('reasonText');
+
+            if (type === 'complaint') {
+                label.innerText = "Describe the Facility Issue";
+                placeholder.placeholder = "e.g., The water cooler in the BCA block is not working...";
+            } else if (type === 'buspass') {
+                label.innerText = "From - To Location";
+                placeholder.placeholder = "e.g., From Indri to Karnal Daily...";
+            } else {
+                label.innerText = "Reason";
+                placeholder.placeholder = "e.g., I have high fever...";
+            }
+        }
+
+        function generateApp() {
+            const type = document.getElementById('appType').value;
+            const authority = document.getElementById('authority').value;
+            const name = document.getElementById('studentName').value || "[Name]";
+            const roll = document.getElementById('rollNo').value || "[Roll No]";
+            const college = document.getElementById('collegeName').value || "[College Name]";
+            const reason = document.getElementById('reasonText').value || "[Reason]";
+            const date = new Date().toLocaleDateString('en-IN');
+
+            let subject = "";
+            let body = "";
+
+            // Template Logic
+            if (type === 'sick') {
+                subject = "Application for Sick Leave";
+                body = `With due respect, I want to state that I am a student of your college. I have been suffering from fever since last night, so I cannot attend my classes today.\n\nKindly grant me leave for one day.`;
+            } else if (type === 'urgent') {
+                subject = "Application for Urgent Piece of Work";
+                body = `With due respect, I want to state that I have an urgent piece of work at home today. Therefore, I am unable to attend the college.\n\nKindly grant me leave for today.`;
+            } else if (type === 'complaint') {
+                subject = "Complaint regarding lack of facilities";
+                body = `Respectfully, I wish to bring to your notice a serious issue faced by students. ${reason}.\n\nThis is causing great inconvenience to all students. I request you to look into this matter and take necessary action as soon as possible.`;
+            } else if (type === 'buspass') {
+                subject = "Request for issuance of Bus Pass";
+                body = `I am a regular student of your college. I commute daily ${reason}. I request you to kindly attest my bus pass form so that I can avail the student concession facility provided by Haryana Roadways.`;
+            }
+
+            // Final Assembly
+            const finalLetter = `To,
+${authority},
+${college}.
+
+Date: ${date}
+
+Subject: ${subject}
+
+Respected Sir/Madam,
+
+${body}
+
+Thanking you,
+
+Yours obediently,
+${name}
+${roll}
+`;
+            document.getElementById('paper').innerText = finalLetter;
+        }
+
+        function copyText() {
+            const text = document.getElementById('paper').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Application copied! You can now paste it in WhatsApp or Word.");
+        }
+    </script>
+</body>
+</html>
