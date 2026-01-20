@@ -6,11 +6,97 @@
     <title>Digital Arzi - Student App Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'pulse-soft': 'pulseSoft 2s infinite',
+                    },
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }
-
-        /* PRINT SETTINGS: This hides the website interface and only prints the letter */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * { transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        body { font-family: 'Poppins', sans-serif; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%); }
+        
+        .dark ::-webkit-scrollbar-track { background: #374151; }
+        
+        /* Gradient background */
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-bg-light { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); }
+        .dark .gradient-bg-light { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); }
+        
+        /* Glass effect */
+        .glass { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .dark .glass { background: rgba(31, 41, 55, 0.95); }
+        
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseSoft { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        
+        /* Custom button hover effect */
+        .btn-hover { position: relative; overflow: hidden; }
+        .btn-hover::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+        .btn-hover:hover::after { width: 300px; height: 300px; }
+        
+        /* Input focus effect */
+        .input-focus:focus { 
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 12px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .toast-error { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        
+        /* Card hover effect */
+        .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
+        
+        /* PRINT SETTINGS */
         @media print {
             body * { visibility: hidden; }
             #printable-area, #printable-area * { visibility: visible; }
@@ -20,162 +106,439 @@
                 top: 0; 
                 width: 100%; 
                 padding: 40px; 
-                background: white;
+                background: white !important;
                 border: none;
                 box-shadow: none;
+                color: black !important;
             }
-            /* Hide the scrollbar and buttons in print mode */
             .no-print { display: none !important; }
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            .mobile-full { width: 100%; }
+            .mobile-text-sm { font-size: 0.875rem; }
+            .mobile-p-3 { padding: 0.75rem; }
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 dark:text-gray-200 gradient-bg-light min-h-screen">
+    
+    <!-- Toast Container -->
+    <div id="toast" class="toast toast-success">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toast-message">Copied!</span>
+    </div>
 
-    <nav class="bg-blue-700 text-white p-4 shadow-lg sticky top-0 z-50 no-print">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white p-3 sm:p-4 shadow-lg sticky top-0 z-50 no-print">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold"><i class="fas fa-graduation-cap"></i> Shiksha Setu</h1>
-            <span class="text-sm bg-blue-800 px-3 py-1 rounded-full">Digital Arzi Tool</span>
+            <h1 class="text-lg sm:text-2xl font-bold flex items-center gap-2">
+                <i class="fas fa-graduation-cap animate-pulse-soft"></i> 
+                <span>Shiksha Setu</span>
+            </h1>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <span class="hidden sm:inline text-xs sm:text-sm bg-white/20 px-3 py-1 rounded-full backdrop-blur">
+                    Digital Arzi Tool
+                </span>
+                <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-white/20 transition-colors" title="Toggle Dark Mode">
+                    <i id="theme-icon" class="fas fa-moon text-lg"></i>
+                </button>
+            </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+    <!-- Main Content -->
+    <div class="container mx-auto p-3 sm:p-4 lg:p-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-4 sm:mt-6">
+            
+            <!-- Input Form Card -->
+            <div class="glass p-4 sm:p-6 rounded-2xl shadow-xl no-print border border-gray-200/50 dark:border-gray-700/50 card-hover animate-slide-up">
+                <h2 class="text-lg sm:text-xl font-bold mb-4 sm:mb-6 flex items-center gap-2 text-gray-800 dark:text-white">
+                    <span class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
+                        <i class="fas fa-edit text-white"></i>
+                    </span>
+                    Enter Your Details
+                </h2>
 
-        <div class="bg-white p-6 rounded-xl shadow-md no-print border-l-4 border-blue-500">
-            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
-                <i class="fas fa-edit text-blue-600"></i> Enter Details
-            </h2>
-
-            <label class="block mb-1 text-xs font-bold text-gray-500 uppercase">Application Type</label>
-            <select id="appType" class="w-full p-3 border rounded mb-4 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400" onchange="generateApp()">
-                <option value="sick">Sick Leave (Simple)</option>
-                <option value="urgent">Urgent Work (Simple)</option>
-                <option value="buspass">Bus Pass Verification</option>
-                <option value="dmc">DMC Correction / Issue</option>
-                <option value="fee">Fee Concession</option>
-            </select>
-
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block mb-1 text-xs font-bold text-gray-500">Your Name</label>
-                    <input type="text" id="studentName" placeholder="Amit Kumar" class="w-full p-2 border rounded mb-3" oninput="generateApp()">
+                <!-- Application Type -->
+                <div class="mb-4">
+                    <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <i class="fas fa-file-alt mr-1"></i> Application Type
+                    </label>
+                    <select id="appType" class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all cursor-pointer" onchange="generateApp()">
+                        <option value="sick">🤒 Sick Leave</option>
+                        <option value="urgent">⚡ Urgent Work Leave</option>
+                        <option value="exam">📝 Exam Leave</option>
+                        <option value="family">👨‍👩‍👧 Family Function Leave</option>
+                        <option value="medical">🏥 Medical Appointment</option>
+                        <option value="buspass">🚌 Bus Pass Verification</option>
+                        <option value="dmc">📋 DMC Correction / Issue</option>
+                        <option value="fee">💰 Fee Concession</option>
+                        <option value="transfer">🔄 Transfer Certificate</option>
+                        <option value="character">📜 Character Certificate</option>
+                        <option value="library">📚 Library Card Issue</option>
+                    </select>
                 </div>
-                <div>
-                    <label class="block mb-1 text-xs font-bold text-gray-500">Roll No / Class</label>
-                    <input type="text" id="rollNo" placeholder="12345 (BCA)" class="w-full p-2 border rounded mb-3" oninput="generateApp()">
+
+                <!-- Name and Roll No -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
+                    <div>
+                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            <i class="fas fa-user mr-1"></i> Your Name
+                        </label>
+                        <input type="text" id="studentName" placeholder="e.g., Amit Kumar" 
+                            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all" 
+                            oninput="generateApp()">
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            <i class="fas fa-id-card mr-1"></i> Roll No / Class
+                        </label>
+                        <input type="text" id="rollNo" placeholder="e.g., 12345 (BCA)" 
+                            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all" 
+                            oninput="generateApp()">
+                    </div>
+                </div>
+
+                <!-- Authority and College -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
+                    <div>
+                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            <i class="fas fa-user-tie mr-1"></i> To Whom
+                        </label>
+                        <select id="authority" class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all cursor-pointer" onchange="generateApp()">
+                            <option value="The Principal">The Principal</option>
+                            <option value="The Head of Department">The HOD</option>
+                            <option value="The Dean">The Dean</option>
+                            <option value="The Registrar">The Registrar</option>
+                            <option value="The Class Teacher">The Class Teacher</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            <i class="fas fa-university mr-1"></i> College/University
+                        </label>
+                        <input type="text" id="collegeName" placeholder="e.g., ABC College" 
+                            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all" 
+                            oninput="generateApp()">
+                    </div>
+                </div>
+
+                <!-- Date Range (for leave applications) -->
+                <div id="dateSection" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
+                    <div>
+                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            <i class="fas fa-calendar-alt mr-1"></i> From Date
+                        </label>
+                        <input type="date" id="fromDate" 
+                            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all cursor-pointer" 
+                            onchange="generateApp()">
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            <i class="fas fa-calendar-check mr-1"></i> To Date
+                        </label>
+                        <input type="date" id="toDate" 
+                            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all cursor-pointer" 
+                            onchange="generateApp()">
+                    </div>
+                </div>
+
+                <!-- Reason -->
+                <div class="mb-4">
+                    <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <i class="fas fa-comment-alt mr-1"></i> Additional Details / Reason
+                    </label>
+                    <textarea id="reasonText" 
+                        class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all resize-none" 
+                        rows="3"
+                        placeholder="e.g., suffering from fever since last night..." 
+                        oninput="generateApp()"></textarea>
+                </div>
+
+                <!-- Tip Box -->
+                <div class="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-800 dark:text-blue-300 text-sm rounded-xl border border-blue-200 dark:border-blue-700/50 flex items-start gap-3">
+                    <i class="fas fa-lightbulb text-yellow-500 text-lg mt-0.5"></i>
+                    <div>
+                        <p class="font-semibold">Pro Tip!</p>
+                        <p class="text-xs opacity-80">The letter updates automatically as you type. You can print or share it directly!</p>
+                    </div>
                 </div>
             </div>
 
-            <label class="block mb-1 text-xs font-bold text-gray-500">To Whom?</label>
-            <select id="authority" class="w-full p-2 border rounded mb-3" onchange="generateApp()">
-                <option value="The Principal">The Principal</option>
-                <option value="The HOD">The HOD</option>
-            </select>
+            <!-- Preview and Actions -->
+            <div class="flex flex-col gap-3 sm:gap-4 animate-slide-up" style="animation-delay: 0.1s;">
+                
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 no-print">
+                    <button onclick="window.print()" class="btn-hover gradient-bg text-white py-3 px-4 rounded-xl shadow-lg hover:shadow-xl font-semibold flex items-center justify-center gap-2 transition-all">
+                        <i class="fas fa-print"></i>
+                        <span class="hidden sm:inline">Print</span>
+                    </button>
+                    <button onclick="copyText()" class="btn-hover bg-gray-700 dark:bg-gray-600 text-white py-3 px-4 rounded-xl shadow-lg hover:shadow-xl font-semibold flex items-center justify-center gap-2 transition-all">
+                        <i class="fas fa-copy"></i>
+                        <span class="hidden sm:inline">Copy</span>
+                    </button>
+                    <button onclick="shareWhatsApp()" class="btn-hover bg-green-500 text-white py-3 px-4 rounded-xl shadow-lg hover:shadow-xl font-semibold flex items-center justify-center gap-2 transition-all">
+                        <i class="fab fa-whatsapp text-lg"></i>
+                        <span class="hidden sm:inline">Share</span>
+                    </button>
+                    <button onclick="resetForm()" class="btn-hover bg-red-500 text-white py-3 px-4 rounded-xl shadow-lg hover:shadow-xl font-semibold flex items-center justify-center gap-2 transition-all">
+                        <i class="fas fa-redo"></i>
+                        <span class="hidden sm:inline">Reset</span>
+                    </button>
+                </div>
 
-            <label class="block mb-1 text-xs font-bold text-gray-500">Specific Reason / Date</label>
-            <textarea id="reasonText" class="w-full p-2 border rounded mb-4 h-20" placeholder="e.g., suffering from fever since last night..." oninput="generateApp()"></textarea>
+                <!-- Letter Preview -->
+                <div id="printable-area" class="glass p-5 sm:p-8 rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 text-gray-900 dark:text-gray-100 leading-relaxed font-serif min-h-[400px] sm:min-h-[500px] card-hover">
+                    <div id="letter-content"></div>
+                </div>
 
-            <div class="p-3 bg-blue-50 text-blue-800 text-xs rounded">
-                <i class="fas fa-info-circle"></i> Tip: The letter updates automatically as you type!
-            </div>
-        </div>
-
-        <div class="flex flex-col">
-            <div class="flex gap-2 mb-2 no-print">
-                <button onclick="window.print()" class="flex-1 bg-green-600 text-white py-2 rounded shadow hover:bg-green-700 font-bold">
-                    <i class="fas fa-print"></i> Print / Save PDF
-                </button>
-                <button onclick="copyText()" class="flex-1 bg-gray-600 text-white py-2 rounded shadow hover:bg-gray-700 font-bold">
-                    <i class="fas fa-copy"></i> Copy Text
-                </button>
-            </div>
-
-            <div id="printable-area" class="bg-white p-8 rounded-xl shadow-lg border border-gray-200 text-black leading-relaxed font-serif h-auto min-h-[500px]">
-                <div id="letter-content"></div>
+                <!-- Character Count -->
+                <div class="no-print text-center text-xs text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-file-word mr-1"></i>
+                    Word Count: <span id="wordCount">0</span> | Character Count: <span id="charCount">0</span>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="no-print mt-8 py-6 text-center text-gray-500 dark:text-gray-400 text-sm">
+        <div class="container mx-auto px-4">
+            <p class="mb-2">
+                <i class="fas fa-heart text-red-500 animate-pulse"></i> Made with love for students
+            </p>
+            <p class="text-xs opacity-70">© 2024 Shiksha Setu - Digital Arzi Tool</p>
+        </div>
+    </footer>
+
     <script>
+        // Initialize date fields with today's date
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('fromDate').value = today;
+            document.getElementById('toDate').value = today;
+            
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').className = 'fas fa-sun text-lg';
+            }
+            
+            generateApp();
+            updateDateSectionVisibility();
+        });
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+            document.getElementById('theme-icon').className = isDark ? 'fas fa-sun text-lg' : 'fas fa-moon text-lg';
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = message;
+            toast.className = `toast toast-${type} show`;
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        function updateDateSectionVisibility() {
+            const type = document.getElementById('appType').value;
+            const dateSection = document.getElementById('dateSection');
+            const leaveTypes = ['sick', 'urgent', 'exam', 'family', 'medical'];
+            dateSection.style.display = leaveTypes.includes(type) ? 'grid' : 'none';
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function getDateRange() {
+            const from = document.getElementById('fromDate').value;
+            const to = document.getElementById('toDate').value;
+            if (!from && !to) {
+                return 'the requested date(s)';
+            }
+            if (!from || !to || from === to) {
+                return formatDate(from || to);
+            }
+            return `${formatDate(from)} to ${formatDate(to)}`;
+        }
+
         function generateApp() {
+            updateDateSectionVisibility();
+            
             const type = document.getElementById('appType').value;
             const authority = document.getElementById('authority').value;
-            const name = document.getElementById('studentName').value || "[Name]";
-            const roll = document.getElementById('rollNo').value || "[Roll No]";
+            const name = document.getElementById('studentName').value || "[Your Name]";
+            const roll = document.getElementById('rollNo').value || "[Roll No / Class]";
+            const college = document.getElementById('collegeName').value || "Govt. College / University";
             const reason = document.getElementById('reasonText').value;
-            const date = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+            const dateRange = getDateRange();
+            const todayDate = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
 
             let subject = "";
             let body = "";
 
-            // LOGIC: Short & Direct Templates
-            if (type === 'sick') {
-                subject = "Application for Sick Leave";
-                let r = reason ? reason : "suffering from fever";
-                body = `Respectfully, I am a student of ${roll} in your college.\n\nI am ${r}, so I cannot attend my classes today. Kindly grant me leave for one day.`;
-            } 
-            else if (type === 'urgent') {
-                subject = "Leave Application for Urgent Work";
-                let r = reason ? reason : "urgent work at home";
-                body = `Respectfully, I have some ${r} today. Therefore, I am unable to attend college.\n\nKindly grant me leave for today.`;
-            } 
-            else if (type === 'buspass') {
-                subject = "Request for Bus Pass Attestation";
-                let r = reason ? reason : "my daily commute";
-                body = `Respectfully, I am a regular student of this college (${roll}).\n\nI need a bus pass for ${r}. Please attest my form so I can submit it to the Haryana Roadways depot.`;
-            }
-            else if (type === 'dmc') {
-                subject = "Request Regarding DMC Issue";
-                let r = reason ? reason : "correction in my name";
-                body = `Respectfully, I want to state that there is an issue with my DMC. The issue is: ${r}.\n\nKindly look into this matter and help me resolve it at the earliest.`;
-            }
-            else if (type === 'fee') {
-                subject = "Request for Fee Concession";
-                body = `Respectfully, I am a student of ${roll}. I belong to a poor family and cannot afford the full fee.\n\nMy academic record has been good. Kindly grant me a fee concession so I can continue my studies.`;
+            // Enhanced templates with more variety
+            switch(type) {
+                case 'sick':
+                    subject = "Application for Sick Leave";
+                    const sickReason = reason || "suffering from fever and body ache";
+                    body = `Respectfully, I beg to state that I am a student of ${roll} in your esteemed institution.\n\nI am ${sickReason}, and due to my health condition, I am unable to attend classes on ${dateRange}.\n\nI humbly request you to kindly grant me leave for the mentioned period. I shall be highly obliged.`;
+                    break;
+                    
+                case 'urgent':
+                    subject = "Leave Application for Urgent Work";
+                    const urgentReason = reason || "some urgent family work";
+                    body = `Respectfully, I wish to bring to your kind attention that I am a student of ${roll}.\n\nI have ${urgentReason} that requires my immediate presence. Therefore, I am unable to attend college on ${dateRange}.\n\nKindly grant me leave for the mentioned period. I shall complete all the pending work upon my return.`;
+                    break;
+                    
+                case 'exam':
+                    subject = "Leave Application for Examination";
+                    const examReason = reason || "a competitive examination";
+                    body = `Respectfully, I am writing to inform you that I am a student of ${roll}.\n\nI have ${examReason} scheduled on ${dateRange}. This examination is very important for my career advancement.\n\nI kindly request you to grant me leave for the examination dates. I shall ensure to complete any missed assignments or classwork.`;
+                    break;
+                    
+                case 'family':
+                    subject = "Leave Application for Family Function";
+                    const familyReason = reason || "an important family function";
+                    body = `Respectfully, I wish to inform you that I am a student of ${roll}.\n\nThere is ${familyReason} at my native place that requires my presence from ${dateRange}. My presence is essential as it is a significant family event.\n\nI humbly request you to kindly grant me leave for the mentioned dates.`;
+                    break;
+                    
+                case 'medical':
+                    subject = "Leave Application for Medical Appointment";
+                    const medicalReason = reason || "a scheduled medical check-up";
+                    body = `Respectfully, I am a student of ${roll} in your institution.\n\nI have ${medicalReason} on ${dateRange}. The doctor's appointment has been scheduled in advance and cannot be rescheduled.\n\nI kindly request you to grant me leave for the appointment. I will submit the medical certificate upon returning.`;
+                    break;
+                    
+                case 'buspass':
+                    subject = "Request for Bus Pass Attestation";
+                    const busReason = reason || "my daily commute to college";
+                    body = `Respectfully, I am a regular student of ${roll} in your esteemed institution.\n\nI require a bus pass for ${busReason}. I travel from my residence to college daily and a bus pass would be economically beneficial for me.\n\nPlease attest my bus pass application form so that I can submit it to the transport department.`;
+                    break;
+                    
+                case 'dmc':
+                    subject = "Request Regarding DMC Correction";
+                    const dmcReason = reason || "incorrect spelling of my name";
+                    body = `Respectfully, I wish to bring to your kind notice that I am a student of ${roll}.\n\nThere is an error in my Detailed Marks Certificate (DMC). The issue is: ${dmcReason}.\n\nI request you to kindly look into this matter and help me get the necessary corrections done at the earliest. I have attached the required documents for verification.`;
+                    break;
+                    
+                case 'fee':
+                    subject = "Request for Fee Concession";
+                    const feeReason = reason || "My family's financial condition is not good, and we are unable to bear the full expense of education";
+                    body = `Respectfully, I am a student of ${roll} in your institution.\n\n${feeReason}. Despite our financial constraints, I have maintained a good academic record and am dedicated to my studies.\n\nI humbly request you to kindly grant me a fee concession so that I may continue my education without financial burden. I shall be highly grateful for this kind consideration.`;
+                    break;
+                    
+                case 'transfer':
+                    subject = "Application for Transfer Certificate";
+                    const tcReason = reason || "I am shifting to another city due to my father's job transfer";
+                    body = `Respectfully, I am a student of ${roll} in your esteemed institution.\n\n${tcReason}. Due to this reason, I will not be able to continue my studies here and need to seek admission in another institution.\n\nI kindly request you to issue my Transfer Certificate at the earliest so that I can complete the admission formalities at my new institution.`;
+                    break;
+                    
+                case 'character':
+                    subject = "Application for Character Certificate";
+                    const charReason = reason || "applying for a government job/higher studies";
+                    body = `Respectfully, I am a student of ${roll} in your institution.\n\nI require a Character Certificate for ${charReason}. During my time at this institution, I have maintained good conduct and have not been involved in any disciplinary issues.\n\nI kindly request you to issue my Character Certificate at the earliest. I shall be highly obliged.`;
+                    break;
+                    
+                case 'library':
+                    subject = "Application for Library Card";
+                    const libReason = reason || "I need access to the library resources for my academic work and research";
+                    body = `Respectfully, I am a newly admitted student of ${roll} in your institution.\n\n${libReason}. The library facilities would greatly help me in my studies and academic projects.\n\nI kindly request you to issue a library card in my name so that I can utilize the library resources effectively.`;
+                    break;
+                    
+                default:
+                    subject = "General Application";
+                    body = `Respectfully, I am a student of ${roll} in your institution.\n\n${reason || "I am writing regarding an important matter."}\n\nKindly consider my request favorably.`;
             }
 
-            // Assemble the Letter
+            // Assemble the Letter with improved formatting
             const finalHTML = `
-                <div class="mb-8 font-bold">
-                    To,<br>
-                    ${authority},<br>
-                    Govt. College / University.
+                <div class="mb-6 sm:mb-8">
+                    <p class="font-semibold">To,</p>
+                    <p class="font-semibold">${authority},</p>
+                    <p>${college}</p>
                 </div>
 
-                <div class="mb-6">
-                    <span class="font-bold">Subject:</span> ${subject}
+                <div class="mb-4 sm:mb-6 pb-3 border-b-2 border-gray-200 dark:border-gray-600">
+                    <span class="font-bold">Subject:</span> <span class="underline">${subject}</span>
                 </div>
 
-                <div class="mb-8">
-                    Respected Sir/Madam,
+                <div class="mb-4 sm:mb-6">
+                    <p>Respected Sir/Madam,</p>
                 </div>
 
-                <div class="mb-8 text-justify whitespace-pre-wrap">
+                <div class="mb-6 sm:mb-8 text-justify whitespace-pre-wrap leading-7 sm:leading-8">
                     ${body}
                 </div>
 
-                <div class="mt-12">
-                    Thanking you,
+                <div class="mt-8 sm:mt-12">
+                    <p>Thanking you,</p>
                 </div>
 
-                <div class="mt-8">
-                    Yours obediently,<br>
-                    <strong>${name}</strong><br>
-                    ${roll}<br>
-                    Date: ${date}
+                <div class="mt-6 sm:mt-8">
+                    <p>Yours obediently,</p>
+                    <p class="font-bold mt-2">${name}</p>
+                    <p>${roll}</p>
+                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Date: ${todayDate}</p>
                 </div>
             `;
 
             document.getElementById('letter-content').innerHTML = finalHTML;
+            updateWordCount();
+        }
+
+        function updateWordCount() {
+            const text = document.getElementById('letter-content').innerText;
+            const trimmedText = text.trim();
+            const words = trimmedText.length === 0 ? 0 : trimmedText.split(/\s+/).filter(word => word.length > 0).length;
+            const chars = text.length;
+            document.getElementById('wordCount').textContent = words;
+            document.getElementById('charCount').textContent = chars;
         }
 
         function copyText() {
             const text = document.getElementById('letter-content').innerText;
-            navigator.clipboard.writeText(text);
-            alert("Copied! Ready to paste.");
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard!', 'success');
+            }).catch(() => {
+                showToast('Failed to copy text', 'error');
+            });
         }
 
-        // Initialize on load
-        generateApp();
+        function shareWhatsApp() {
+            const text = document.getElementById('letter-content').innerText;
+            // Truncate to first 1000 characters to avoid URL length issues
+            const truncatedText = text.length > 1000 ? text.substring(0, 1000) + '...' : text;
+            const encodedText = encodeURIComponent(truncatedText);
+            window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+            showToast('Opening WhatsApp...', 'success');
+        }
+
+        function resetForm() {
+            document.getElementById('studentName').value = '';
+            document.getElementById('rollNo').value = '';
+            document.getElementById('collegeName').value = '';
+            document.getElementById('reasonText').value = '';
+            document.getElementById('appType').selectedIndex = 0;
+            document.getElementById('authority').selectedIndex = 0;
+            
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('fromDate').value = today;
+            document.getElementById('toDate').value = today;
+            
+            generateApp();
+            showToast('Form reset successfully!', 'success');
+        }
+
+        // Note: generateApp() is called inside DOMContentLoaded event listener above
     </script>
 </body>
 </html>
