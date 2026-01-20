@@ -372,8 +372,8 @@
     </div>
 
     <!-- Toast Container -->
-    <div id="toast" class="toast toast-success">
-        <i class="fas fa-check-circle text-xl"></i>
+    <div id="toast" class="toast toast-success" role="alert" aria-live="polite">
+        <i class="fas fa-check-circle text-xl" aria-hidden="true"></i>
         <span id="toast-message">Copied!</span>
     </div>
 
@@ -463,15 +463,15 @@
                         </span>
                         Application Type
                     </label>
-                    <select id="appType" class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern cursor-pointer text-sm sm:text-base font-medium" onchange="generateApp()">
-                        <optgroup label="📋 Leave Applications">
+                    <select id="appType" class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern cursor-pointer text-sm sm:text-base font-medium" onchange="generateApp()" aria-label="Select application type">
+                        <optgroup label="Leave Applications">
                             <option value="sick">🤒 Sick Leave</option>
                             <option value="urgent">⚡ Urgent Work Leave</option>
                             <option value="exam">📝 Exam Leave</option>
                             <option value="family">👨‍👩‍👧 Family Function Leave</option>
                             <option value="medical">🏥 Medical Appointment</option>
                         </optgroup>
-                        <optgroup label="📄 Certificates & Documents">
+                        <optgroup label="Certificates and Documents">
                             <option value="buspass">🚌 Bus Pass Verification</option>
                             <option value="dmc">📋 DMC Correction / Issue</option>
                             <option value="fee">💰 Fee Concession</option>
@@ -517,7 +517,7 @@
                             </span>
                             To Whom
                         </label>
-                        <select id="authority" class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern cursor-pointer text-sm sm:text-base font-medium" onchange="generateApp()">
+                        <select id="authority" class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern cursor-pointer text-sm sm:text-base font-medium" onchange="generateApp()" aria-label="Select authority to address">
                             <option value="The Principal">👔 The Principal</option>
                             <option value="The Head of Department">👨‍💼 The HOD</option>
                             <option value="The Dean">🎓 The Dean</option>
@@ -704,7 +704,10 @@
                 info: 'fa-info-circle'
             };
             toast.querySelector('i').className = `fas ${icons[type] || icons.success} text-xl`;
+            // Strip emojis for screen reader accessibility while keeping visual emojis
+            const cleanMessage = message.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
             toastMessage.textContent = message;
+            toastMessage.setAttribute('aria-label', cleanMessage);
             toast.className = `toast toast-${type} show`;
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
