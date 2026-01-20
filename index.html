@@ -3,98 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Arzi - Student App Generator</title>
+    <title>Shiksha Setu - Student Application Generator</title>
+    <meta name="description" content="Generate professional student applications for leave, certificates, and more with Shiksha Setu - your digital arzi tool">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     animation: {
-                        'fade-in': 'fadeIn 0.3s ease-in-out',
-                        'slide-up': 'slideUp 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'slide-up': 'slideUp 0.6s ease-out forwards',
+                        'slide-down': 'slideDown 0.4s ease-out forwards',
                         'pulse-soft': 'pulseSoft 2s infinite',
+                        'bounce-subtle': 'bounceSubtle 2s infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
                     },
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            100: '#e0e9ff',
+                            200: '#c7d7fe',
+                            300: '#a4bbfc',
+                            400: '#8098f9',
+                            500: '#667eea',
+                            600: '#5a67d8',
+                            700: '#4c51bf',
+                            800: '#434190',
+                            900: '#3c366b',
+                        },
+                        accent: {
+                            500: '#764ba2',
+                            600: '#6b4190',
+                        }
+                    }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
         
-        * { transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
-        body { font-family: 'Poppins', sans-serif; }
+        * { transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s; }
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .font-serif { font-family: 'Playfair Display', Georgia, serif; }
         
         /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%); }
-        
-        .dark ::-webkit-scrollbar-track { background: #374151; }
-        
-        /* Gradient background */
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .gradient-bg-light { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); }
-        .dark .gradient-bg-light { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); }
-        
-        /* Glass effect */
-        .glass { 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            border-radius: 10px;
+            border: 2px solid #f1f5f9;
         }
-        .dark .glass { background: rgba(31, 41, 55, 0.95); }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #5a67d8 0%, #6b4190 100%); }
+        .dark ::-webkit-scrollbar-track { background: #1e293b; }
+        .dark ::-webkit-scrollbar-thumb { border-color: #1e293b; }
+        
+        /* Gradient backgrounds */
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-bg-animated {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #6366f1, #8b5cf6);
+            background-size: 400% 400%;
+            animation: gradientFlow 8s ease infinite;
+        }
+        .gradient-bg-light { 
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+        }
+        .dark .gradient-bg-light { 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        }
+        
+        /* Glass morphism effect */
+        .glass { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass { 
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Enhanced glass for cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
         
         /* Animations */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulseSoft { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes slideDown { 
+            from { opacity: 0; transform: translateY(-20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes pulseSoft { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        @keyframes bounceSubtle { 
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
+            to { box-shadow: 0 0 40px rgba(102, 126, 234, 0.6); }
+        }
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
         
         /* Custom button hover effect */
-        .btn-hover { position: relative; overflow: hidden; }
-        .btn-hover::after {
+        .btn-hover { 
+            position: relative; 
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-hover::before {
             content: '';
             position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .btn-hover:hover::before { left: 100%; }
+        .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4); }
+        .btn-hover:active { transform: translateY(0); }
+        
+        /* Enhanced input styles */
+        .input-modern {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #e2e8f0, #cbd5e1) border-box;
+        }
+        .dark .input-modern {
+            background: linear-gradient(#1e293b, #1e293b) padding-box,
+                        linear-gradient(135deg, #334155, #475569) border-box;
+        }
+        .input-modern:focus { 
+            outline: none;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #667eea, #764ba2) border-box;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15), 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+        .dark .input-modern:focus {
+            background: linear-gradient(#1e293b, #1e293b) padding-box,
+                        linear-gradient(135deg, #667eea, #764ba2) border-box;
+        }
+        
+        /* Floating label animation */
+        .floating-label {
+            position: relative;
+        }
+        .floating-label label {
+            position: absolute;
+            left: 16px;
             top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.4s, height 0.4s;
+            transform: translateY(-50%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            background: white;
+            padding: 0 4px;
         }
-        .btn-hover:hover::after { width: 300px; height: 300px; }
-        
-        /* Input focus effect */
-        .input-focus:focus { 
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
-            border-color: #667eea;
+        .dark .floating-label label {
+            background: #1e293b;
+        }
+        .floating-label input:focus ~ label,
+        .floating-label input:not(:placeholder-shown) ~ label,
+        .floating-label textarea:focus ~ label,
+        .floating-label textarea:not(:placeholder-shown) ~ label {
+            top: 0;
+            font-size: 0.75rem;
+            color: #667eea;
+            font-weight: 600;
         }
         
-        /* Toast notification */
+        /* Toast notification with better animation */
         .toast {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            padding: 12px 24px;
-            border-radius: 12px;
+            transform: translateX(-50%) translateY(120px) scale(0.9);
+            padding: 16px 28px;
+            border-radius: 16px;
             color: white;
-            font-weight: 500;
+            font-weight: 600;
             z-index: 9999;
             opacity: 0;
-            transition: transform 0.3s, opacity 0.3s;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast.show { 
+            transform: translateX(-50%) translateY(0) scale(1); 
+            opacity: 1; 
+        }
         .toast-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
         .toast-error { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        .toast-info { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
         
-        /* Card hover effect */
-        .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
+        /* Card hover effect with depth */
+        .card-hover { 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.15),
+                        0 15px 25px rgba(0,0,0,0.1);
+        }
+        
+        /* Paper effect for letter preview */
+        .paper-effect {
+            background: linear-gradient(to bottom, #ffffff 0%, #fafafa 100%);
+            position: relative;
+            box-shadow: 
+                0 1px 1px rgba(0,0,0,0.05),
+                0 2px 2px rgba(0,0,0,0.05),
+                0 4px 4px rgba(0,0,0,0.05),
+                0 8px 8px rgba(0,0,0,0.05),
+                0 16px 16px rgba(0,0,0,0.05);
+        }
+        .paper-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            border-radius: 8px 8px 0 0;
+        }
+        .dark .paper-effect {
+            background: linear-gradient(to bottom, #1e293b 0%, #0f172a 100%);
+        }
+        
+        /* Icon badge animation */
+        .icon-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-badge::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: inherit;
+            opacity: 0;
+            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes ping {
+            75%, 100% { transform: scale(1.5); opacity: 0; }
+        }
+        
+        /* Step indicator */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            transition: all 0.3s;
+        }
+        .step-dot.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
         
         /* PRINT SETTINGS */
         @media print {
@@ -105,13 +318,14 @@
                 left: 0; 
                 top: 0; 
                 width: 100%; 
-                padding: 40px; 
+                padding: 50px; 
                 background: white !important;
                 border: none;
                 box-shadow: none;
                 color: black !important;
             }
             .no-print { display: none !important; }
+            .paper-effect::before { display: none; }
         }
         
         /* Mobile optimizations */
@@ -120,197 +334,328 @@
             .mobile-text-sm { font-size: 0.875rem; }
             .mobile-p-3 { padding: 0.75rem; }
         }
+        
+        /* Skeleton loading */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        .dark .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+        }
+        
+        /* Decorative elements */
+        .decorative-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        
+        /* Selection styling */
+        ::selection {
+            background: rgba(102, 126, 234, 0.3);
+            color: inherit;
+        }
     </style>
 </head>
-<body class="text-gray-800 dark:text-gray-200 gradient-bg-light min-h-screen">
+<body class="text-gray-800 dark:text-gray-200 gradient-bg-light min-h-screen overflow-x-hidden">
     
+    <!-- Decorative Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="decorative-blob w-96 h-96 bg-purple-400 dark:bg-purple-600 -top-48 -right-48"></div>
+        <div class="decorative-blob w-80 h-80 bg-blue-400 dark:bg-blue-600 top-1/3 -left-40"></div>
+        <div class="decorative-blob w-72 h-72 bg-indigo-400 dark:bg-indigo-600 bottom-20 right-20"></div>
+    </div>
+
     <!-- Toast Container -->
     <div id="toast" class="toast toast-success">
-        <i class="fas fa-check-circle mr-2"></i>
+        <i class="fas fa-check-circle text-xl"></i>
         <span id="toast-message">Copied!</span>
     </div>
 
     <!-- Navigation -->
-    <nav class="gradient-bg text-white p-3 sm:p-4 shadow-lg sticky top-0 z-50 no-print">
+    <nav class="gradient-bg-animated text-white p-4 shadow-2xl sticky top-0 z-50 no-print">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-lg sm:text-2xl font-bold flex items-center gap-2">
-                <i class="fas fa-graduation-cap animate-pulse-soft"></i> 
-                <span>Shiksha Setu</span>
-            </h1>
-            <div class="flex items-center gap-2 sm:gap-3">
-                <span class="hidden sm:inline text-xs sm:text-sm bg-white/20 px-3 py-1 rounded-full backdrop-blur">
-                    Digital Arzi Tool
-                </span>
-                <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-white/20 transition-colors" title="Toggle Dark Mode">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center icon-badge">
+                    <i class="fas fa-graduation-cap text-lg sm:text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-2xl font-bold tracking-tight">Shiksha Setu</h1>
+                    <p class="text-[10px] sm:text-xs opacity-80 font-medium">Digital Arzi Generator</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-4">
+                <div class="hidden md:flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/20">
+                    <i class="fas fa-sparkles text-yellow-300"></i>
+                    <span class="text-sm font-medium">Quick & Professional</span>
+                </div>
+                <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur flex items-center justify-center transition-all hover:scale-110" title="Toggle Dark Mode">
                     <i id="theme-icon" class="fas fa-moon text-lg"></i>
                 </button>
             </div>
         </div>
     </nav>
 
+    <!-- Hero Section -->
+    <section class="no-print py-8 sm:py-12 relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto animate-slide-up">
+                <div class="inline-flex items-center gap-2 bg-gradient-to-r from-primary-100 to-purple-100 dark:from-primary-900/50 dark:to-purple-900/50 text-primary-700 dark:text-primary-300 px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-primary-200 dark:border-primary-700">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                    Generate Applications in Seconds
+                </div>
+                <h2 class="text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+                    Create <span class="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">Professional</span> Student Applications
+                </h2>
+                <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-lg max-w-2xl mx-auto mb-6">
+                    Fill in your details, choose your application type, and get a perfectly formatted letter ready to print or share instantly.
+                </p>
+                
+                <!-- Stats -->
+                <div class="flex flex-wrap justify-center gap-6 sm:gap-10 mt-8">
+                    <div class="text-center">
+                        <div class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">11+</div>
+                        <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">Application Types</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">100%</div>
+                        <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">Free Forever</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">Instant</div>
+                        <div class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">Generation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Main Content -->
-    <div class="container mx-auto p-3 sm:p-4 lg:p-6">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-4 sm:mt-6">
+    <div class="container mx-auto px-3 sm:px-4 lg:px-6 pb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
             
             <!-- Input Form Card -->
-            <div class="glass p-4 sm:p-6 rounded-2xl shadow-xl no-print border border-gray-200/50 dark:border-gray-700/50 card-hover animate-slide-up">
-                <h2 class="text-lg sm:text-xl font-bold mb-4 sm:mb-6 flex items-center gap-2 text-gray-800 dark:text-white">
-                    <span class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
-                        <i class="fas fa-edit text-white"></i>
-                    </span>
-                    Enter Your Details
-                </h2>
+            <div class="glass-card p-5 sm:p-8 rounded-3xl no-print card-hover animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="flex items-center justify-between mb-6 sm:mb-8">
+                    <h2 class="text-xl sm:text-2xl font-bold flex items-center gap-3 text-gray-800 dark:text-white">
+                        <span class="w-12 h-12 rounded-2xl gradient-bg flex items-center justify-center shadow-lg">
+                            <i class="fas fa-pen-fancy text-white text-lg"></i>
+                        </span>
+                        Enter Details
+                    </h2>
+                    <div class="step-indicator hidden sm:flex">
+                        <span class="step-dot active"></span>
+                        <span class="step-dot active"></span>
+                        <span class="step-dot"></span>
+                    </div>
+                </div>
 
                 <!-- Application Type -->
-                <div class="mb-4">
-                    <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                        <i class="fas fa-file-alt mr-1"></i> Application Type
+                <div class="mb-5">
+                    <label class="flex items-center gap-2 mb-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                        <span class="w-6 h-6 rounded-lg gradient-bg flex items-center justify-center">
+                            <i class="fas fa-file-alt text-white text-xs"></i>
+                        </span>
+                        Application Type
                     </label>
-                    <select id="appType" class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all cursor-pointer" onchange="generateApp()">
-                        <option value="sick">🤒 Sick Leave</option>
-                        <option value="urgent">⚡ Urgent Work Leave</option>
-                        <option value="exam">📝 Exam Leave</option>
-                        <option value="family">👨‍👩‍👧 Family Function Leave</option>
-                        <option value="medical">🏥 Medical Appointment</option>
-                        <option value="buspass">🚌 Bus Pass Verification</option>
-                        <option value="dmc">📋 DMC Correction / Issue</option>
-                        <option value="fee">💰 Fee Concession</option>
-                        <option value="transfer">🔄 Transfer Certificate</option>
-                        <option value="character">📜 Character Certificate</option>
-                        <option value="library">📚 Library Card Issue</option>
+                    <select id="appType" class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern cursor-pointer text-sm sm:text-base font-medium" onchange="generateApp()">
+                        <optgroup label="📋 Leave Applications">
+                            <option value="sick">🤒 Sick Leave</option>
+                            <option value="urgent">⚡ Urgent Work Leave</option>
+                            <option value="exam">📝 Exam Leave</option>
+                            <option value="family">👨‍👩‍👧 Family Function Leave</option>
+                            <option value="medical">🏥 Medical Appointment</option>
+                        </optgroup>
+                        <optgroup label="📄 Certificates & Documents">
+                            <option value="buspass">🚌 Bus Pass Verification</option>
+                            <option value="dmc">📋 DMC Correction / Issue</option>
+                            <option value="fee">💰 Fee Concession</option>
+                            <option value="transfer">🔄 Transfer Certificate</option>
+                            <option value="character">📜 Character Certificate</option>
+                            <option value="library">📚 Library Card Issue</option>
+                        </optgroup>
                     </select>
                 </div>
 
                 <!-- Name and Roll No -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                     <div>
-                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            <i class="fas fa-user mr-1"></i> Your Name
+                        <label class="flex items-center gap-2 mb-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                            <span class="w-6 h-6 rounded-lg bg-blue-500 flex items-center justify-center">
+                                <i class="fas fa-user text-white text-xs"></i>
+                            </span>
+                            Your Name
                         </label>
                         <input type="text" id="studentName" placeholder="e.g., Amit Kumar" 
-                            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all" 
+                            class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern text-sm sm:text-base" 
                             oninput="generateApp()">
                     </div>
                     <div>
-                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            <i class="fas fa-id-card mr-1"></i> Roll No / Class
+                        <label class="flex items-center gap-2 mb-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                            <span class="w-6 h-6 rounded-lg bg-green-500 flex items-center justify-center">
+                                <i class="fas fa-id-card text-white text-xs"></i>
+                            </span>
+                            Roll No / Class
                         </label>
                         <input type="text" id="rollNo" placeholder="e.g., 12345 (BCA)" 
-                            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all" 
+                            class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern text-sm sm:text-base" 
                             oninput="generateApp()">
                     </div>
                 </div>
 
                 <!-- Authority and College -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                     <div>
-                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            <i class="fas fa-user-tie mr-1"></i> To Whom
+                        <label class="flex items-center gap-2 mb-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                            <span class="w-6 h-6 rounded-lg bg-purple-500 flex items-center justify-center">
+                                <i class="fas fa-user-tie text-white text-xs"></i>
+                            </span>
+                            To Whom
                         </label>
-                        <select id="authority" class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all cursor-pointer" onchange="generateApp()">
-                            <option value="The Principal">The Principal</option>
-                            <option value="The Head of Department">The HOD</option>
-                            <option value="The Dean">The Dean</option>
-                            <option value="The Registrar">The Registrar</option>
-                            <option value="The Class Teacher">The Class Teacher</option>
+                        <select id="authority" class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern cursor-pointer text-sm sm:text-base font-medium" onchange="generateApp()">
+                            <option value="The Principal">👔 The Principal</option>
+                            <option value="The Head of Department">👨‍💼 The HOD</option>
+                            <option value="The Dean">🎓 The Dean</option>
+                            <option value="The Registrar">📋 The Registrar</option>
+                            <option value="The Class Teacher">👩‍🏫 The Class Teacher</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            <i class="fas fa-university mr-1"></i> College/University
+                        <label class="flex items-center gap-2 mb-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                            <span class="w-6 h-6 rounded-lg bg-orange-500 flex items-center justify-center">
+                                <i class="fas fa-university text-white text-xs"></i>
+                            </span>
+                            College/University
                         </label>
                         <input type="text" id="collegeName" placeholder="e.g., ABC College" 
-                            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all" 
+                            class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern text-sm sm:text-base" 
                             oninput="generateApp()">
                     </div>
                 </div>
 
                 <!-- Date Range (for leave applications) -->
-                <div id="dateSection" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
+                <div id="dateSection" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                     <div>
-                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            <i class="fas fa-calendar-alt mr-1"></i> From Date
+                        <label class="flex items-center gap-2 mb-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                            <span class="w-6 h-6 rounded-lg bg-teal-500 flex items-center justify-center">
+                                <i class="fas fa-calendar-alt text-white text-xs"></i>
+                            </span>
+                            From Date
                         </label>
                         <input type="date" id="fromDate" 
-                            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all cursor-pointer" 
+                            class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern cursor-pointer text-sm sm:text-base" 
                             onchange="generateApp()">
                     </div>
                     <div>
-                        <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            <i class="fas fa-calendar-check mr-1"></i> To Date
+                        <label class="flex items-center gap-2 mb-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                            <span class="w-6 h-6 rounded-lg bg-cyan-500 flex items-center justify-center">
+                                <i class="fas fa-calendar-check text-white text-xs"></i>
+                            </span>
+                            To Date
                         </label>
                         <input type="date" id="toDate" 
-                            class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all cursor-pointer" 
+                            class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern cursor-pointer text-sm sm:text-base" 
                             onchange="generateApp()">
                     </div>
                 </div>
 
                 <!-- Reason -->
-                <div class="mb-4">
-                    <label class="block mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                        <i class="fas fa-comment-alt mr-1"></i> Additional Details / Reason
+                <div class="mb-5">
+                    <label class="flex items-center gap-2 mb-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                        <span class="w-6 h-6 rounded-lg bg-pink-500 flex items-center justify-center">
+                            <i class="fas fa-comment-dots text-white text-xs"></i>
+                        </span>
+                        Additional Details / Reason
                     </label>
                     <textarea id="reasonText" 
-                        class="w-full p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white input-focus focus:outline-none transition-all resize-none" 
+                        class="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 text-gray-800 dark:text-white input-modern resize-none text-sm sm:text-base" 
                         rows="3"
-                        placeholder="e.g., suffering from fever since last night..." 
+                        placeholder="Optional: Add specific details about your request..." 
                         oninput="generateApp()"></textarea>
                 </div>
 
                 <!-- Tip Box -->
-                <div class="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-800 dark:text-blue-300 text-sm rounded-xl border border-blue-200 dark:border-blue-700/50 flex items-start gap-3">
-                    <i class="fas fa-lightbulb text-yellow-500 text-lg mt-0.5"></i>
+                <div class="p-4 bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 dark:from-amber-900/30 dark:via-yellow-900/30 dark:to-orange-900/30 rounded-2xl border border-amber-200/50 dark:border-amber-700/30 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0 shadow-lg">
+                        <i class="fas fa-lightbulb text-white"></i>
+                    </div>
                     <div>
-                        <p class="font-semibold">Pro Tip!</p>
-                        <p class="text-xs opacity-80">The letter updates automatically as you type. You can print or share it directly!</p>
+                        <p class="font-bold text-amber-800 dark:text-amber-300 text-sm mb-1">Pro Tip! ✨</p>
+                        <p class="text-xs text-amber-700 dark:text-amber-400 opacity-90">Your letter updates automatically as you type. Print it or share directly on WhatsApp!</p>
                     </div>
                 </div>
             </div>
 
             <!-- Preview and Actions -->
-            <div class="flex flex-col gap-3 sm:gap-4 animate-slide-up" style="animation-delay: 0.1s;">
+            <div class="flex flex-col gap-5 animate-slide-up" style="animation-delay: 0.2s;">
                 
                 <!-- Action Buttons -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 no-print">
-                    <button onclick="window.print()" class="btn-hover gradient-bg text-white py-3 px-4 rounded-xl shadow-lg hover:shadow-xl font-semibold flex items-center justify-center gap-2 transition-all">
-                        <i class="fas fa-print"></i>
-                        <span class="hidden sm:inline">Print</span>
+                <div class="grid grid-cols-4 gap-2 sm:gap-3 no-print">
+                    <button onclick="window.print()" class="btn-hover gradient-bg text-white py-4 px-3 rounded-2xl shadow-xl font-bold flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all group">
+                        <i class="fas fa-print text-lg group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs sm:text-sm">Print</span>
                     </button>
-                    <button onclick="copyText()" class="btn-hover bg-gray-700 dark:bg-gray-600 text-white py-3 px-4 rounded-xl shadow-lg hover:shadow-xl font-semibold flex items-center justify-center gap-2 transition-all">
-                        <i class="fas fa-copy"></i>
-                        <span class="hidden sm:inline">Copy</span>
+                    <button onclick="copyText()" class="btn-hover bg-slate-700 dark:bg-slate-600 text-white py-4 px-3 rounded-2xl shadow-xl font-bold flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all group">
+                        <i class="fas fa-copy text-lg group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs sm:text-sm">Copy</span>
                     </button>
-                    <button onclick="shareWhatsApp()" class="btn-hover bg-green-500 text-white py-3 px-4 rounded-xl shadow-lg hover:shadow-xl font-semibold flex items-center justify-center gap-2 transition-all">
-                        <i class="fab fa-whatsapp text-lg"></i>
-                        <span class="hidden sm:inline">Share</span>
+                    <button onclick="shareWhatsApp()" class="btn-hover bg-gradient-to-br from-green-500 to-green-600 text-white py-4 px-3 rounded-2xl shadow-xl font-bold flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all group">
+                        <i class="fab fa-whatsapp text-xl group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs sm:text-sm">Share</span>
                     </button>
-                    <button onclick="resetForm()" class="btn-hover bg-red-500 text-white py-3 px-4 rounded-xl shadow-lg hover:shadow-xl font-semibold flex items-center justify-center gap-2 transition-all">
-                        <i class="fas fa-redo"></i>
-                        <span class="hidden sm:inline">Reset</span>
+                    <button onclick="resetForm()" class="btn-hover bg-gradient-to-br from-red-500 to-rose-600 text-white py-4 px-3 rounded-2xl shadow-xl font-bold flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all group">
+                        <i class="fas fa-rotate text-lg group-hover:rotate-180 transition-transform duration-500"></i>
+                        <span class="text-xs sm:text-sm">Reset</span>
                     </button>
                 </div>
 
                 <!-- Letter Preview -->
-                <div id="printable-area" class="glass p-5 sm:p-8 rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 text-gray-900 dark:text-gray-100 leading-relaxed font-serif min-h-[400px] sm:min-h-[500px] card-hover">
-                    <div id="letter-content"></div>
+                <div id="printable-area" class="glass-card paper-effect p-6 sm:p-10 rounded-3xl text-gray-900 dark:text-gray-100 leading-relaxed min-h-[500px] sm:min-h-[600px] card-hover">
+                    <div id="letter-content" class="font-serif"></div>
                 </div>
 
                 <!-- Character Count -->
-                <div class="no-print text-center text-xs text-gray-500 dark:text-gray-400">
-                    <i class="fas fa-file-word mr-1"></i>
-                    Word Count: <span id="wordCount">0</span> | Character Count: <span id="charCount">0</span>
+                <div class="no-print flex items-center justify-center gap-6 text-sm text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-slate-800/50 backdrop-blur p-3 rounded-2xl">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-font text-primary-500"></i>
+                        <span>Words: <strong id="wordCount" class="text-gray-700 dark:text-gray-300">0</strong></span>
+                    </div>
+                    <div class="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-text-width text-accent-500"></i>
+                        <span>Characters: <strong id="charCount" class="text-gray-700 dark:text-gray-300">0</strong></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="no-print mt-8 py-6 text-center text-gray-500 dark:text-gray-400 text-sm">
-        <div class="container mx-auto px-4">
-            <p class="mb-2">
-                <i class="fas fa-heart text-red-500 animate-pulse"></i> Made with love for students
-            </p>
-            <p class="text-xs opacity-70">© 2024 Shiksha Setu - Digital Arzi Tool</p>
+    <footer class="no-print mt-8 py-8 relative">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex flex-col items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white"></i>
+                    </div>
+                    <span class="text-lg font-bold text-gray-800 dark:text-white">Shiksha Setu</span>
+                </div>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">
+                    Made with <i class="fas fa-heart text-red-500 animate-pulse mx-1"></i> for students everywhere
+                </p>
+                <div class="flex items-center gap-4 text-xs text-gray-400 dark:text-gray-500">
+                    <span>© 2024 Shiksha Setu</span>
+                    <span>•</span>
+                    <span>Digital Arzi Tool</span>
+                    <span>•</span>
+                    <span>Free Forever</span>
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -329,18 +674,36 @@
             
             generateApp();
             updateDateSectionVisibility();
+            
+            // Add smooth reveal animation to cards
+            document.querySelectorAll('.animate-slide-up').forEach((el, i) => {
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                }, i * 100);
+            });
         });
 
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
             const isDark = document.documentElement.classList.contains('dark');
             localStorage.setItem('darkMode', isDark);
-            document.getElementById('theme-icon').className = isDark ? 'fas fa-sun text-lg' : 'fas fa-moon text-lg';
+            const icon = document.getElementById('theme-icon');
+            icon.className = isDark ? 'fas fa-sun text-lg' : 'fas fa-moon text-lg';
+            icon.style.transform = 'rotate(360deg)';
+            setTimeout(() => { icon.style.transform = ''; }, 300);
+            showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled', 'info');
         }
 
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toast-message');
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle'
+            };
+            toast.querySelector('i').className = `fas ${icons[type] || icons.success} text-xl`;
             toastMessage.textContent = message;
             toast.className = `toast toast-${type} show`;
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
@@ -350,7 +713,9 @@
             const type = document.getElementById('appType').value;
             const dateSection = document.getElementById('dateSection');
             const leaveTypes = ['sick', 'urgent', 'exam', 'family', 'medical'];
-            dateSection.style.display = leaveTypes.includes(type) ? 'grid' : 'none';
+            const shouldShow = leaveTypes.includes(type);
+            dateSection.style.display = shouldShow ? 'grid' : 'none';
+            dateSection.style.opacity = shouldShow ? '1' : '0';
         }
 
         function formatDate(dateStr) {
@@ -461,33 +826,37 @@
 
             // Assemble the Letter with improved formatting
             const finalHTML = `
-                <div class="mb-6 sm:mb-8">
-                    <p class="font-semibold">To,</p>
-                    <p class="font-semibold">${authority},</p>
-                    <p>${college}</p>
+                <div class="mb-8 pt-4">
+                    <p class="font-bold text-gray-800 dark:text-gray-200 text-lg">To,</p>
+                    <p class="font-bold text-gray-800 dark:text-gray-200 text-lg">${authority},</p>
+                    <p class="text-gray-600 dark:text-gray-400">${college}</p>
                 </div>
 
-                <div class="mb-4 sm:mb-6 pb-3 border-b-2 border-gray-200 dark:border-gray-600">
-                    <span class="font-bold">Subject:</span> <span class="underline">${subject}</span>
+                <div class="mb-6 pb-4 border-b-2 border-dashed border-gray-200 dark:border-gray-600">
+                    <span class="font-bold text-gray-700 dark:text-gray-300">Subject:</span> 
+                    <span class="ml-2 text-gray-800 dark:text-gray-200 underline decoration-2 decoration-primary-500 underline-offset-4">${subject}</span>
                 </div>
 
-                <div class="mb-4 sm:mb-6">
-                    <p>Respected Sir/Madam,</p>
+                <div class="mb-6">
+                    <p class="text-gray-800 dark:text-gray-200 text-lg">Respected Sir/Madam,</p>
                 </div>
 
-                <div class="mb-6 sm:mb-8 text-justify whitespace-pre-wrap leading-7 sm:leading-8">
+                <div class="mb-8 text-justify whitespace-pre-wrap leading-8 text-gray-700 dark:text-gray-300">
                     ${body}
                 </div>
 
-                <div class="mt-8 sm:mt-12">
-                    <p>Thanking you,</p>
+                <div class="mt-10 pt-6 border-t border-gray-100 dark:border-gray-700">
+                    <p class="text-gray-600 dark:text-gray-400 italic">Thanking you in anticipation,</p>
                 </div>
 
-                <div class="mt-6 sm:mt-8">
-                    <p>Yours obediently,</p>
-                    <p class="font-bold mt-2">${name}</p>
-                    <p>${roll}</p>
-                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Date: ${todayDate}</p>
+                <div class="mt-8">
+                    <p class="text-gray-600 dark:text-gray-400">Yours obediently,</p>
+                    <p class="font-bold text-xl mt-3 text-gray-800 dark:text-gray-200 bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">${name}</p>
+                    <p class="text-gray-600 dark:text-gray-400 mt-1">${roll}</p>
+                    <div class="mt-4 inline-flex items-center gap-2 bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-lg">
+                        <i class="fas fa-calendar-day text-primary-500 text-sm"></i>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Date: ${todayDate}</span>
+                    </div>
                 </div>
             `;
 
@@ -507,7 +876,7 @@
         function copyText() {
             const text = document.getElementById('letter-content').innerText;
             navigator.clipboard.writeText(text).then(() => {
-                showToast('Copied to clipboard!', 'success');
+                showToast('📋 Copied to clipboard!', 'success');
             }).catch(() => {
                 showToast('Failed to copy text', 'error');
             });
@@ -519,10 +888,15 @@
             const truncatedText = text.length > 1000 ? text.substring(0, 1000) + '...' : text;
             const encodedText = encodeURIComponent(truncatedText);
             window.open(`https://wa.me/?text=${encodedText}`, '_blank');
-            showToast('Opening WhatsApp...', 'success');
+            showToast('📱 Opening WhatsApp...', 'success');
         }
 
         function resetForm() {
+            // Add visual feedback
+            const form = document.querySelector('.glass-card');
+            form.style.transform = 'scale(0.98)';
+            setTimeout(() => { form.style.transform = ''; }, 150);
+            
             document.getElementById('studentName').value = '';
             document.getElementById('rollNo').value = '';
             document.getElementById('collegeName').value = '';
@@ -535,8 +909,26 @@
             document.getElementById('toDate').value = today;
             
             generateApp();
-            showToast('Form reset successfully!', 'success');
+            showToast('🔄 Form reset successfully!', 'success');
         }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key.toLowerCase()) {
+                    case 'p':
+                        e.preventDefault();
+                        window.print();
+                        break;
+                    case 'c':
+                        if (e.shiftKey) {
+                            e.preventDefault();
+                            copyText();
+                        }
+                        break;
+                }
+            }
+        });
 
         // Note: generateApp() is called inside DOMContentLoaded event listener above
     </script>
